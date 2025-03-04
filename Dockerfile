@@ -1,5 +1,5 @@
 # Use an official Python base image
-FROM python:3.9-slim-buster
+FROM python:3.10
 
 # Set environment variables to prevent .pyc files and enable buffering
 ENV PYTHONUNBUFFERED=1 \
