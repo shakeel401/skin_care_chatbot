@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy and install dependencies separately to leverage Docker caching
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Remove pywin32 from requirements.txt to avoid Linux installation issues
+RUN sed -i '/pywin32/d' requirements.txt && pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire application code
 COPY . .
