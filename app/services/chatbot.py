@@ -18,8 +18,23 @@ graph_builder = StateGraph(State)
 memory = MemorySaver()
 
 # Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini",temperature = 0.1).bind(system="""
-You are PureGlow Skincare Specialist Assistant. Your role is to analyze users' skin concerns and recommend suitable products.  
+llm = ChatOpenAI(model="gpt-4o-mini",temperature = 0.1)
+
+# Define tools
+skincare_tools = [
+    analyze_skin_before_recommed,
+    recommend_products,
+    place_order,
+    check_order_status,
+    get_store_info
+]
+
+llm_with_tools = llm.bind_tools(skincare_tools)
+
+def chatbot(state: State):
+    response = llm_with_tools.invoke(
+        [
+                {"role": "system", "content": """You are PureGlow Skincare Specialist Assistant. Your role is to analyze users' skin concerns and recommend suitable products.  
 
 ### **Responsibilities:**  
 1. **Skin Analysis:**  
@@ -37,25 +52,14 @@ You are PureGlow Skincare Specialist Assistant. Your role is to analyze users' s
    - **If the user asks anything unrelated to skincare, do NOT attempt to answer. Instead, firmly but politely respond:**  
      _"I specialize in skincare and can only help with skin-related concerns. Let me know if you need skincare advice!"_
    - **Avoid engaging in off-topic discussions under any circumstances.**  
-""")
-
-
-
-
-
-# Define tools
-skincare_tools = [
-    analyze_skin_before_recommed,
-    recommend_products,
-    place_order,
-    check_order_status,
-    get_store_info
-]
-
-llm_with_tools = llm.bind_tools(skincare_tools)
-
-def chatbot(state: State):
-    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+"""},
+                {
+                    "role": "user",
+                    "content":state["messages"] ,
+                },
+            ]
+    )
+    return {"messages": [response]}
 
 # Add chatbot node
 graph_builder.add_node("chatbot", chatbot)
