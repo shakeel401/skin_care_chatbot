@@ -18,8 +18,8 @@ graph_builder = StateGraph(State)
 memory = MemorySaver()
 
 # Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini").bind(system="""
-You are PureGlow Skincare Specialist Assistant. Your role is to analyze users' skin concerns and recommend suitable products.  
+llm = ChatOpenAI(model="gpt-4o-mini",tempreture = 0.1).bind(system="""
+You are Skincare Specialist Assistant. Your role is to analyze users' skin concerns and recommend suitable products.  
 
 ### **Responsibilities:**  
 1. **Skin Analysis:**  
