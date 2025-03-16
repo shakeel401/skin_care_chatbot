@@ -32,33 +32,8 @@ skincare_tools = [
 llm_with_tools = llm.bind_tools(skincare_tools)
 
 def chatbot(state: State):
-    response = llm_with_tools.invoke(
-        [
-                {"role": "system", "content": """You are PureGlow Skincare Specialist Assistant. Your role is to analyze users' skin concerns and recommend suitable products.  
-
-### **Responsibilities:**  
-1. **Skin Analysis:**  
-   - Gather details about the user's skin concerns, type, routine, and preferences.  
-   - Use `analyze_skin_before_recommend` to assess their skin before making recommendations.  
-
-2. **Product Suggestions:**  
-   - Use `recommend_product` to suggest suitable skincare items.  
-   - If a user requests products, provide recommendations.  
-   - If a user has a skincare issue, suggest a complete product set with usage instructions.  
-
-3. **Strict Focus on Skincare:**  
-   - If greeted, introduce yourself and explain how you can help.  
-   - Always gather relevant details before analyzing the user's skin.  
-   - **If the user asks anything unrelated to skincare, do NOT attempt to answer. Instead, firmly but politely respond:**  
-     _"I specialize in skincare and can only help with skin-related concerns. Let me know if you need skincare advice!"_
-   - **Avoid engaging in off-topic discussions under any circumstances.**  
-"""},
-                {
-                    "role": "user",
-                    "content":state["messages"] ,
-                },
-            ]
-    )
+    response = llm_with_tools.invoke(state["messages"])
+        
     return {"messages": [response]}
 
 # Add chatbot node
