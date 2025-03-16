@@ -18,7 +18,7 @@ graph_builder = StateGraph(State)
 memory = MemorySaver()
 
 # Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini",temperature = 0.1)
+llm = ChatOpenAI(model="gpt-4o-mini",temperature = 0.3)
 
 # Define tools
 skincare_tools = [
